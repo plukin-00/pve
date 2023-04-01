@@ -6,7 +6,7 @@ read oldID
 case $oldID in
     ''|*[!0-9]*)
         echo bad input. Exiting
-        exit;;
+        exit 0;;
     *)
         echo Old ID - $oldID ;;
 esac
@@ -16,7 +16,7 @@ read newID
 case $newID in
     ''|*[!0-9]*)
         echo bad input. Exiting
-        exit;;
+        exit 0;;
     *)
         echo New ID - $newID ;;
 esac
@@ -27,7 +27,7 @@ vgNAME="$(lvs --noheadings -o lv_name,vg_name | grep $oldID | awk -F ' ' '{print
 case $vgNAME in
     "")
         echo Machine not in Volume Group. Exiting
-        exit;;
+        exit 0;;
     *)
         echo Volume Group - $vgNAME ;;
 esac
@@ -47,7 +47,7 @@ elif [[ $1 -et "vm" || $1 -et "VM" ]]; then
 	sed -i "s/$oldVMID/$newVMID/g" /etc/pve/qemu-server/$oldVMID.conf;
 	mv /etc/pve/qemu-server/$oldVMID.conf /etc/pve/qemu-server/$newVMID.conf;
 else
-	exit;;
+	exit 0
 fi
 
 echo Ta-Da! We renamed the $1 $oldID to $newID.
