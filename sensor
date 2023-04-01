@@ -1,0 +1,53 @@
+#!/bin/sh
+
+case $1 in
+        cpu|c)
+                sensors | grep 'Package id 0:' | cut -c17-20
+        ;;
+        core0|c0)
+                sensors | grep 'Core 0:' | cut -c17-20
+        ;;
+        core1|c1)
+                sensors | grep 'Core 1:' | cut -c17-20
+        ;;
+        core2|c2)
+                sensors | grep 'Core 2:' | cut -c17-20
+        ;;
+        core3|c3)
+                sensors | grep 'Core 3:' | cut -c17-20
+        ;;
+        updates|u)
+                apt-get upgrade -s | /usr/bin/grep -P '^\d+ upgraded' | cut -d" " -f1
+        ;;
+        list-updates|lu)
+                apt list --upgradeable 2>/dev/null | /usr/bin/grep / | cut -d"/" -f1
+        ;;
+        load|l)
+                top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}'
+        ;;
+        mem_per|mp)
+                total=$(free -m | grep Mem: | sed 's/[^.0-9][^.0-9]*/:/g' | cut -d: -f2)
+                used=$(free -m | grep Mem: | sed 's/[^.0-9][^.0-9]*/:/g' | cut -d: -f3)
+                echo "scale=1;$used*100/$total" | bc
+        ;;
+        mem_total|mt)
+                free -m | grep Mem: | sed 's/[^.0-9][^.0-9]*/:/g' | cut -d":" -f2
+        ;;
+        mem_used|mu)
+                free -m | grep Mem: | sed 's/[^.0-9][^.0-9]*/:/g' | cut -d":" -f3
+        ;;
+        mem_free|mf)
+                free -m | grep Mem: | sed 's/[^.0-9][^.0-9]*/:/g' | cut -d":" -f4
+        ;;
+        pve-root)
+                df | sed -n '/pve-root/{s/  */ /gp}' | cut -d' ' -f5 | sed "s/%//g"
+        ;;
+        data)
+                lvdisplay /dev/pve/data | sed -n '/pool data/{s/  */ /gp}' | cut -d' ' -f5 | sed "s/%//g"
+        ;;
+        local-backup)
+                df | sed -n '/sdb1/{s/  */ /gp}' | cut -d' ' -f5 | sed "s/%//g"
+        ;;
+        pve-stick)
+                lvdisplay /dev/pve-stick/pve-stick | sed -n '/pool data/{s/  */ /gp}' | cut -d' ' -f5 | sed "s/%//g"
+        ;;
