@@ -44,8 +44,8 @@ elif [[ $1 -eq "vm" || $1 -eq "VM" ]]; then
 	for i in $(lvs -a|grep $vgNAME | awk '{print $1}' | grep $oldVMID);
 	do lvrename $vgNAME/vm-$oldVMID-disk-$(echo $i | awk '{print substr($0,length,1)}') vm-$newVMID-disk-$(echo $i | awk '{print substr($0,length,1)}');
 	done;
-	sed -i "s/$oldVMID/$newVMID/g" /etc/pve/qemu-server/$oldVMID.conf;
-	mv /etc/pve/qemu-server/$oldVMID.conf /etc/pve/qemu-server/$newVMID.conf;
+	sed -i "s/$oldID/$newID/g" /etc/pve/qemu-server/$oldID.conf;
+	mv /etc/pve/qemu-server/$oldID.conf /etc/pve/qemu-server/$newID.conf;
 else
 	exit 0
 fi
