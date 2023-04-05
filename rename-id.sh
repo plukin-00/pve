@@ -32,23 +32,14 @@ case $vgNAME in
         echo Volume Group - $vgNAME ;;
 esac
 
-if [[ -n $(qm list | grep 301) ]]; then
-        type="vm"
-elif [[ -n $(pct list | grep 301) ]]; then
-        type="lxc"
-else
-        type="error getting typ"
-        exit 0
-fi
-
-if [[ $type == "lxc" ]]; then
+if [[ -n $(pct list | grep $oldID) ]]; then
 	echo rename LXC
 	for i in $(lvs -a|grep $vgNAME | awk '{print $1}' | grep $oldID);
 	do lvrename $vgNAME/vm-$oldID-disk-$(echo $i | awk '{print substr($0,length,1)}') vm-$newID-disk-$(echo $i | awk '{print substr($0,length,1)}');
 	done;
 	sed -i "s/$oldID/$newID/g" /etc/pve/lxc/$oldID.conf;
 	mv /etc/pve/lxc/$oldID.conf /etc/pve/lxc/$newID.conf;
-elif [[ $type == "vm" ]]; then
+elif [[ -n $(qm list | grep $oldID) ]]; then
 	echo rename VM
 	for i in $(lvs -a|grep $vgNAME | awk '{print $1}' | grep $oldVMID);
 	do lvrename $vgNAME/vm-$oldID-disk-$(echo $i | awk '{print substr($0,length,1)}') vm-$newID-disk-$(echo $i | awk '{print substr($0,length,1)}');
@@ -56,7 +47,7 @@ elif [[ $type == "vm" ]]; then
 	sed -i "s/$oldID/$newID/g" /etc/pve/qemu-server/$oldID.conf;
 	mv /etc/pve/qemu-server/$oldID.conf /etc/pve/qemu-server/$newID.conf;
 else
-	echo argument missing (vm/lxc)
+	echo error getting type
 	exit 0
 fi
 
