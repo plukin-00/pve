@@ -1,9 +1,0 @@
-#!/bin/bash
-
-
-if [[ $(qm list | grep 301) -eq 0 ]]; then
-	set type = "vm"
-elif [[ $(pct list | grep 301) -eq 0 ]]; then
-	set type = "lxc"
-fi
-echo $type
