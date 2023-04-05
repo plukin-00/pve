@@ -41,7 +41,7 @@ if [[ -n $(pct list | grep $oldID) ]]; then
 	mv /etc/pve/lxc/$oldID.conf /etc/pve/lxc/$newID.conf;
 elif [[ -n $(qm list | grep $oldID) ]]; then
 	echo rename VM
-	for i in $(lvs -a|grep $vgNAME | awk '{print $1}' | grep $oldVMID);
+	for i in $(lvs -a|grep $vgNAME | awk '{print $1}' | grep $oldID);
 	do lvrename $vgNAME/vm-$oldID-disk-$(echo $i | awk '{print substr($0,length,1)}') vm-$newID-disk-$(echo $i | awk '{print substr($0,length,1)}');
 	done;
 	sed -i "s/$oldID/$newID/g" /etc/pve/qemu-server/$oldID.conf;
