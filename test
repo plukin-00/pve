@@ -3,7 +3,7 @@
 
 if [[ $(qm list | grep 301) != "" ]]; then
 	set type = "vm"
-el [[ $(pct list | grep 301) != "" ]]; then
+elif [[ $(pct list | grep 301) != "" ]]; then
 	set type = "lxc"
 fi
 echo $type
