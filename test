@@ -4,7 +4,7 @@ echo $1
 
 if [[ $1 == "ct" || $1 == "CT" ]]; then
 	echo "rename ct"
-elif [{ $1 == "vm" ||  $1 == "VM" ]]; then
+elif [[ $1 == "vm" ||  $1 == "VM" ]]; then
 	echo "rename vm"
 else
 	echo "exit"
