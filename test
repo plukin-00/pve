@@ -2,9 +2,9 @@
 
 echo $1
 
-if [[ $1 -eq "ct" ] || [ $1 -eq "CT" ]]; then
+if [ $1 -eq "ct" ] || [ $1 -eq "CT" ]; then
 	echo "rename ct"
-elif [[ $1 -eq "vm" ] || [ $1 -eq "VM" ]]; then
+elif [ $1 -eq "vm" ] || [ $1 -eq "VM" ]; then
 	echo "rename vm"
 else
 	echo "exit"
